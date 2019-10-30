@@ -1,0 +1,260 @@
+commit 672007bae525172f8c5d52edb371ff725d59cc7d (HEAD -> master, origin/master, 
+origin/HEAD)
+Author: joaodolobo <41696617+joaodolobo@users.noreply.github.com>
+Date:   Tue Oct 22 13:37:49 2019 +0100
+
+    primeira versao decente
+
+diff --git a/.ipynb_checkpoints/Gini_coefficients-checkpoint.ipynb b/.ipynb_chec
+kpoints/Gini_coefficients-checkpoint.ipynb
+index ed41e77..39c4f0f 100644
+--- a/.ipynb_checkpoints/Gini_coefficients-checkpoint.ipynb
++++ b/.ipynb_checkpoints/Gini_coefficients-checkpoint.ipynb
+@@ -2,11 +2,262 @@
+  "cells": [
+   {
+    "cell_type": "code",
+-   "execution_count": 1,
++   "execution_count": 79,
+    "metadata": {},
+    "outputs": [],
+    "source": [
+-    "import numpy as np"
++    "import os\n",
++    "import numpy as np\n",
++    "import pandas as pd\n",
++    "import matplotlib as plt\n",
++    "import matplotlib.pyplot as plt"
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 10,
++   "metadata": {},
++   "outputs": [],
++   "source": [
++    "os.chdir('C:/Users/jan_lenovo/Documents/MEGA/03_Doutoramento/08_Apresenta√
+ß√µes_publica√ß√µes/E-Planning')"
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 18,
++   "metadata": {},
++   "outputs": [],
++   "source": [
++    "df_capacitated = pd.read_excel(\"Custos_por_algoritmos.xlsx\", sheet_name=
+\"Capacitated_facility\", header=0,\\\n",
++    "             dtype= {'SubSection': str})"
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 51,
++   "metadata": {},
++   "outputs": [],
++   "source": [
++    "#df_capacitated[-1:]\n",
++    "df_capacitated = df_capacitated[:-1]"
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 136,
++   "metadata": {},
++   "outputs": [
++    {
++     "data": {
++      "text/html": [
++       "<div>\n",
++       "<style scoped>\n",
++       "    .dataframe tbody tr th:only-of-type {\n",
++       "        vertical-align: middle;\n",
++       "    }\n",
++       "\n",
++       "    .dataframe tbody tr th {\n",
++       "        vertical-align: top;\n",
++       "    }\n",
++       "\n",
++       "    .dataframe thead th {\n",
++       "        text-align: right;\n",
++       "    }\n",
++       "</style>\n",
++       "<table border=\"1\" class=\"dataframe\">\n",
++       "  <thead>\n",
++       "    <tr style=\"text-align: right;\">\n",
++       "      <th></th>\n",
++       "      <th>SubSection</th>\n",
++       "      <th>School</th>\n",
++       "      <th>Capacity</th>\n",
++       "      <th>Alunos_alocados</th>\n",
++       "      <th>Unnamed: 4</th>\n",
++       "      <th>Custo</th>\n",
++       "      <th>Dist</th>\n",
++       "      <th>per_alunos</th>\n",
++       "      <th>per_dist</th>\n",
++       "      <th>per_cum_pessoas</th>\n",
++       "      <th>per_cum_distancias</th>\n",
++       "    </tr>\n",
++       "  </thead>\n",
++       "  <tbody>\n",
++       "    <tr>\n",
++       "      <th>0</th>\n",
++       "      <td>1180600225</td>\n",
++       "      <td>1.180600e+09</td>\n",
++       "      <td>225.0</td>\n",
++       "      <td>1.745890</td>\n",
++       "      <td>NaN</td>\n",
++       "      <td>0.000000</td>\n",
++       "      <td>0.000000</td>\n",
++       "      <td>0.001982</td>\n",
++       "      <td>0.000000</td>\n",
++       "      <td>0.001982</td>\n",
++       "      <td>0.000000</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>1</th>\n",
++       "      <td>1180700206</td>\n",
++       "      <td>1.180700e+09</td>\n",
++       "      <td>225.0</td>\n",
++       "      <td>1.163920</td>\n",
++       "      <td>NaN</td>\n",
++       "      <td>0.000000</td>\n",
++       "      <td>0.000000</td>\n",
++       "      <td>0.001321</td>\n",
++       "      <td>0.000000</td>\n",
++       "      <td>0.003303</td>\n",
++       "      <td>0.000000</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>2</th>\n",
++       "      <td>1181000301</td>\n",
++       "      <td>1.181000e+09</td>\n",
++       "      <td>225.0</td>\n",
++       "      <td>0.775949</td>\n",
++       "      <td>NaN</td>\n",
++       "      <td>0.000000</td>\n",
++       "      <td>0.000000</td>\n",
++       "      <td>0.000881</td>\n",
++       "      <td>0.000000</td>\n",
++       "      <td>0.004183</td>\n",
++       "      <td>0.000000</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>3</th>\n",
++       "      <td>1181000123</td>\n",
++       "      <td>1.181000e+09</td>\n",
++       "      <td>225.0</td>\n",
++       "      <td>0.969936</td>\n",
++       "      <td>NaN</td>\n",
++       "      <td>322.990207</td>\n",
++       "      <td>0.498442</td>\n",
++       "      <td>0.001101</td>\n",
++       "      <td>0.000175</td>\n",
++       "      <td>0.005284</td>\n",
++       "      <td>0.000175</td>\n",
++       "    </tr>\n",
++       "    <tr>\n",
++       "      <th>4</th>\n",
++       "      <td>1180700304</td>\n",
++       "      <td>1.180700e+09</td>\n",
++       "      <td>225.0</td>\n",
++       "      <td>2.133860</td>\n",
++       "      <td>NaN</td>\n",
++       "      <td>352.930114</td>\n",
++       "      <td>0.544645</td>\n",
++       "      <td>0.002422</td>\n",
++       "      <td>0.000191</td>\n",
++       "      <td>0.007706</td>\n",
++       "      <td>0.000366</td>\n",
++       "    </tr>\n",
++       "  </tbody>\n",
++       "</table>\n",
++       "</div>"
++      ],
++      "text/plain": [
++       "   SubSection        School  Capacity  Alunos_alocados  Unnamed: 4  \\\
+n",
++       "0  1180600225  1.180600e+09     225.0         1.745890         NaN   \n
+",
++       "1  1180700206  1.180700e+09     225.0         1.163920         NaN   \n
+",
++       "2  1181000301  1.181000e+09     225.0         0.775949         NaN   \n
+",
++       "3  1181000123  1.181000e+09     225.0         0.969936         NaN   \n
+",
++       "4  1180700304  1.180700e+09     225.0         2.133860         NaN   \n
+",
++       "\n",
++       "       Custo       Dist  per_alunos  per_dist  per_cum_pessoas  \\\n",
++       "0    0.000000  0.000000    0.001982  0.000000         0.001982   \n",
++       "1    0.000000  0.000000    0.001321  0.000000         0.003303   \n",
++       "2    0.000000  0.000000    0.000881  0.000000         0.004183   \n",
++       "3  322.990207  0.498442    0.001101  0.000175         0.005284   \n",
++       "4  352.930114  0.544645    0.002422  0.000191         0.007706   \n",
++       "\n",
++       "   per_cum_distancias  \n",
++       "0            0.000000  \n",
++       "1            0.000000  \n",
++       "2            0.000000  \n",
++       "3            0.000175  \n",
++       "4            0.000366  "
++      ]
++     },
++     "execution_count": 136,
++     "metadata": {},
++     "output_type": "execute_result"
++    }
++   ],
++   "source": [
++    "df_capacitated.head()"
++   ]
++  },
++  {
++   "cell_type": "code",
++   "execution_count": 135,
++   "metadata": {},
++   "outputs": [
++    {
++     "data": {
++      "text/plain": [
++       "[Text(0,0,'Sample1'), Text(0,0,'Sample2')]"
++      ]
++     },
++     "execution_count": 135,
++     "metadata": {},
++     "output_type": "execute_result"
++    },
++    {
++     "data": {
++      "image/png": "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
